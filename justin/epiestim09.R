@@ -26,6 +26,12 @@ res_parametric_si <- estimate_R(Flu2009$incidence,
                                   mean_si = 2.6, 
                                   std_si = 1.5))
 )
+head(res_parametric_si)
+Rt <- data.frame(res_parametric_si$R)
+Rt
+
+mean(Flu2009$incidence$I)
+sd(Flu2009$incidence$I)
 
 head(res_parametric_si$R)
 png("res_parametric_si.png")
