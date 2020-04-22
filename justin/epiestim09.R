@@ -46,3 +46,25 @@ res_non_parametric_si <- estimate_R(Flu2009$incidence,
 png("res_nonparametric_si.png")
 plot(res_non_parametric_si, "R")
 dev.off()
+
+# full distribution of the serial interval using discr_si function (this is how Flu2009$si_distr was obtained, with additional rounding): 
+discr_si(0:20, mu = 2.6, sigma = 1.5)
+
+mean(Flu2009$incidence$I)
+sd(Flu2009$incidence$I)
+Flu2009$incidence
+
+## we choose to draw:
+## - the mean of the SI in a Normal(2.6, 1), truncated at 1 and 4.2
+## - the sd of the SI in a Normal(1.5, 0.5), truncated at 0.5 and 2.5
+config <- make_config(list(mean_si = 2.6, std_mean_si = 1,
+                           min_mean_si = 1, max_mean_si = 4.2,
+                           std_si = 1.5, std_std_si = 0.5,
+                           min_std_si = 0.5, max_std_si = 2.5))
+res_uncertain_si <- estimate_R(Flu2009$incidence,
+                               method = "uncertain_si",
+                               config = config)
+png("res_nonparametric_si.png")
+plot(res_uncertain_si, legend = FALSE) 
+## the third plot now shows all the SI distributions considered
+dev.off()
