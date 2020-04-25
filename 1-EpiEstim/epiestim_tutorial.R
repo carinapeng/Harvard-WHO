@@ -1,5 +1,6 @@
 library(EpiEstim)
 library(ggplot2)
+library(incidence)
 library(cluster.datasets)
 
 # load data
