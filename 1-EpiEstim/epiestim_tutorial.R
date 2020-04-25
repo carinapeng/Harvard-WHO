@@ -84,3 +84,6 @@ res_uncertain_si <- estimate_R(Flu2009$incidence,
 png("res_nonparametric_si.png")
 plot(res_uncertain_si, legend = FALSE) 
 dev.off()
+
+# More models
+# See https://rdrr.io/cran/EpiEstim/f/vignettes/demo.Rmd

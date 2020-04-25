@@ -17,7 +17,7 @@ library(shiny)
                     min = 1,
                     max = 50,
                     value = 30)
-        
+          
       ),
       
       # Main panel for displaying outputs ----
