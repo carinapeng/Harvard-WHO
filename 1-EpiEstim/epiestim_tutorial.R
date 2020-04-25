@@ -8,7 +8,7 @@ data(Flu2009)
 # explore data and write to file
 head(Flu2009$incidence)
 head(Flu2009$si_data)
-write.csv(Flu2009, "Flu2009.csv")
+write.csv(Flu2009$incidence, "Flu2009.csv")
 
 ## 1. serial interval (SI) distribution:
 ## interval-ceonsored serial interval data:
@@ -20,6 +20,7 @@ write.csv(Flu2009, "Flu2009.csv")
 
 png("incidents.png")
 plot(as.incidence(Flu2009$incidence$I, dates = Flu2009$incidence$dates))
+## dev.off turns off png so that only the code above writes to png file
 dev.off()
 
 res_parametric_si <- estimate_R(Flu2009$incidence, 
