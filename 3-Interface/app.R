@@ -8,7 +8,7 @@ library(shiny)
 ui <- fluidPage(
   
   # App title ----
-  titlePanel("Uploading Files"),
+  titlePanel("World Health Organization"),
   
   # Sidebar layout with input and output definitions ----
   sidebarLayout(
@@ -58,8 +58,21 @@ ui <- fluidPage(
     mainPanel(
       
       # Output: Data file ----
-      tableOutput("contents"),
-      tableOutput("contents2")
+      tabsetPanel( #type = "tabs",
+                  tabPanel("Welcome", 
+                           tableOutput("contents")),
+                  tabPanel("Graphs", 
+                           plotOutput("contents3"),
+                           plotOutput("contents4")
+                           ),
+                  tabPanel("Statistics", 
+                           verbatimTextOutput("contents5"),
+                           tableOutput("contents2"))
+      )
+      # tableOutput("contents"),
+      # tableOutput("contents2"),
+      # plotOutput("contents3"),
+      # plotOutput("contents4")
       
     )
     
@@ -67,7 +80,7 @@ ui <- fluidPage(
 )
 
 # Define server logic to read selected file ----
-server <- function(input, output) {
+server <- function(input, output) { 
     csv <- reactive({
         req(input$file1)
            read.csv(input$file1$datapath,
@@ -121,18 +134,20 @@ server <- function(input, output) {
     else {
       return(Rt)
     }
-      # },
-      # error = function(e) {
-        # return a safeError if a parsing error occurs
-        # stop(safeError(e))
-          # return
-      # }
-    # )
-    
   })
-    output$contents3 <- renderPlot({
 
-    })
+  output$contents3 <- renderPlot({
+    plot(df(), what=c("incid"))
+  })
+  output$contents4 <- renderPlot({
+    plot(df(), what=c("R"))
+  })
+  output$contents5 <- renderPrint({
+      x <- df()$R$Mean
+     return(x[length(x)])
+     # return("Hi")
+  })
+
 }
 
 # Create Shiny app ----

@@ -1,4 +1,4 @@
-gcap# Setup
+# Setup
 ## GGplot converts your data and code into "layers" by using aesthetic mapping aes()
 options(scipen=999)  # turn off scientific notation like 1e+06
 library(ggplot2)
