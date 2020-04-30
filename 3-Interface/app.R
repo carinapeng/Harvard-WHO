@@ -1,7 +1,7 @@
 library(EpiEstim)
 library(ggplot2)
 library(incidence)
-
+library(markdown)
 library(shiny)
 
 # Define UI for data upload app ----
@@ -60,6 +60,8 @@ ui <- fluidPage(
       # Output: Data file ----
       tabsetPanel( #type = "tabs",
                   tabPanel("Welcome", 
+                           withMathJax(includeMarkdown("Modeling-COVID19.md")),
+                           downloadButton("downloadData", "Download Sample COVID-19 CSV File"),
                            tableOutput("contents")),
                   tabPanel("Graphs", 
                            plotOutput("contents3"),
@@ -144,9 +146,17 @@ server <- function(input, output) {
   })
   output$contents5 <- renderPrint({
       x <- df()$R$Mean
-     return(x[length(x)])
-     # return("Hi")
-  })
+    return(writeLines(c("The current rate of transmission is estimated to be", x[length(x)], "people per day")))
+     # return(, x[length(x)])
+  })  
+  # Downloadable csv of selected dataset ----
+  output$downloadData <- downloadHandler(
+    filename =  "COVID19-Cases.csv",
+    content = function(file) {
+    sample <- read.csv("sample.csv")
+      write.csv(sample, file, row.names = FALSE)
+    }
+  )
 
 }
 
