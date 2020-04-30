@@ -110,7 +110,7 @@ server <- function(input, output) {
     # and uploads a file, head of that data file by default,
     # or all rows if selected, will be shown.
     
-      if (is.null(csv()) || is.null(dfR2()) ) {
+      if (is.null(csv()) || is.null(df()) ) {
           return(NULL)
       }
 
