@@ -1,6 +1,6 @@
 # COVID-19 Estimator
 
-This is an interface that helps countries estimate the rate of transmission of COVID-19 given data containing the number of incidents reported on specific dates.
+This is an interface that helps countries estimate the rate of transmission of COVID-19 using the number of reported cases on specific dates.
 
 This interface dynamically produces the following results:
 

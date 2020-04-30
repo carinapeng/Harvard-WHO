@@ -62,7 +62,9 @@ ui <- fluidPage(
                   tabPanel("Welcome", 
                            withMathJax(includeMarkdown("Modeling-COVID19.md")),
                            downloadButton("downloadData", "Download Sample COVID-19 CSV File"),
-                           tableOutput("contents")),
+                           h3(textOutput("contents1")),
+                           tableOutput("contents")
+                           ),
                   tabPanel("Graphs", 
                            plotOutput("contents3"),
                            plotOutput("contents4")
@@ -118,6 +120,13 @@ server <- function(input, output) {
     }
     
   })
+
+  output$contents1 <- renderPrint({
+      if (is.null(csv())) {
+          return(NULL)
+      }
+      return(writeLines("Uploaded File"))
+  })
   
   output$contents2 <- renderTable({
     
@@ -138,6 +147,7 @@ server <- function(input, output) {
     }
   })
 
+
   output$contents3 <- renderPlot({
     plot(df(), what=c("incid"))
   })
@@ -157,6 +167,7 @@ server <- function(input, output) {
       write.csv(sample, file, row.names = FALSE)
     }
   )
+
 
 }
 
