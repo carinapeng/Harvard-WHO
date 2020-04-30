@@ -67,11 +67,14 @@ ui <- fluidPage(
                            ),
                   tabPanel("Graphs", 
                            plotOutput("contents3"),
-                           plotOutput("contents4")
+                           plotOutput("contents4"),
+                           downloadButton("downloadData3", "Download Epidemic Curves")
                            ),
                   tabPanel("Statistics", 
+                           h3("Summary Statistics"),
                            verbatimTextOutput("contents5"),
-                           tableOutput("contents2"))
+                           tableOutput("contents2"),
+                           downloadButton("downloadData2", "Download Summary Statistics of Transmission Rates"))
       )
       # tableOutput("contents"),
       # tableOutput("contents2"),
@@ -100,6 +103,17 @@ server <- function(input, output) {
         dfR <- estimate_R(x, method = "parametric_si", config = make_config(list(mean_si = 4.8, std_si = 2.3)))
         return(dfR)
     })
+
+    plt <- function(){
+        req(input$file1)
+        x = read.csv(input$file1$datapath,
+                 header = input$header,
+                 sep = input$sep,
+                 quote = input$quote)
+        x[,1]<-as.Date(x[,1], "%d/%m/%Y")
+        dfR <- estimate_R(x, method = "parametric_si", config = make_config(list(mean_si = 4.8, std_si = 2.3)))
+        return(plot(dfR, what=c("incid")))
+    }
 
   
   output$contents <- renderTable({
@@ -168,7 +182,22 @@ server <- function(input, output) {
     }
   )
 
+  output$downloadData2 <- downloadHandler(
+    filename = function() {
+      paste("summary-", input$file1, sep = "")
+    },
+    content = function(file) {
+    Rt <- df()$R
+      write.csv(Rt, file, row.names = FALSE)
+    })
 
+  # output$downloadData3 <- downloadHandler(
+  #   filename = "Epidemic-Curves.png",
+  #   content = function(file) {
+  #   png(file)
+  #   plt()
+  #   dev.off()
+  #   })
 }
 
 # Create Shiny app ----
