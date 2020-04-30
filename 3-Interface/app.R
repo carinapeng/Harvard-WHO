@@ -26,6 +26,7 @@ ui <- fluidPage(
       # Horizontal line ----
       tags$hr(),
       
+      helpText("Toggle Settings for uploading CSV"),
       # Input: Checkbox if file has header ----
       checkboxInput("header", "Header", TRUE),
       
@@ -45,6 +46,7 @@ ui <- fluidPage(
       
       # Horizontal line ----
       tags$hr(),
+      helpText("Toggle Settings for viewing results"),
       
       # Input: Select number of rows to display ----
       radioButtons("disp", "Display",
@@ -67,8 +69,7 @@ ui <- fluidPage(
                            ),
                   tabPanel("Graphs", 
                            plotOutput("contents3"),
-                           plotOutput("contents4"),
-                           downloadButton("downloadData3", "Download Epidemic Curves")
+                           plotOutput("contents4")
                            ),
                   tabPanel("Statistics", 
                            h3("Summary Statistics"),
@@ -76,11 +77,6 @@ ui <- fluidPage(
                            tableOutput("contents2"),
                            downloadButton("downloadData2", "Download Summary Statistics of Transmission Rates"))
       )
-      # tableOutput("contents"),
-      # tableOutput("contents2"),
-      # plotOutput("contents3"),
-      # plotOutput("contents4")
-      
     )
     
   )
@@ -190,14 +186,6 @@ server <- function(input, output) {
     Rt <- df()$R
       write.csv(Rt, file, row.names = FALSE)
     })
-
-  # output$downloadData3 <- downloadHandler(
-  #   filename = "Epidemic-Curves.png",
-  #   content = function(file) {
-  #   png(file)
-  #   plt()
-  #   dev.off()
-  #   })
 }
 
 # Create Shiny app ----
