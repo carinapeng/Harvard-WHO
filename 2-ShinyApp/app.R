@@ -68,13 +68,27 @@ ui <- fluidPage(
 
 # Define server logic to read selected file ----
 server <- function(input, output) {
-    csv =reactive({
+    csv <- reactive({
         req(input$file1)
            read.csv(input$file1$datapath,
                  header = input$header,
                  sep = input$sep,
                  quote = input$quote)
     })
+
+    dfR2 <- reactive({
+        req(input$file1)
+        # csv()
+        # csv1 <- read.csv(input$file1$datapath,
+        #          header = input$header,
+        #          sep = input$sep,
+        #          quote = input$quote)
+        x = csv()
+        x[,1]<-as.Date(x[,1], "%d/%m/%Y")
+        dfR <- estimate_R(x, method = "parametric_si", config = make_config(list(mean_si = 4.8, std_si = 2.3)))
+        return(dfR)
+    })
+
     # if(!file.exists("input$file1$datapath")) {
     #     df = ""
     # }
@@ -141,24 +155,22 @@ server <- function(input, output) {
     # tryCatch(
     #   {
 
-      if (is.null(csv())) {
+      if (is.null(csv()) || is.null(dfR2()) ) {
           return(NULL)
       }
-        dfR <- csv()
-      print(dfR)
+        # dfR <- csv()
+      # print(dfR)
 
-        dfR[,1]<-as.Date(dfR[,1], "%d/%m/%Y")
         
-        dfR2 <-estimate_R(dfR, method = "parametric_si", config = make_config(list(mean_si = 4.8, std_si = 2.3)))
-        
-        dfR2 <- dfR2$R
+       dfR <- dfR2() 
+      print(class(dfR))
+        dfR3 <- dfR$R
     if(input$disp == "head") {
-      return(head(dfR2))
+      return(head(dfR3))
     }
     else {
-      return(dfR2)
+      return(dfR3)
     }
-    
       # },
       # error = function(e) {
         # return a safeError if a parsing error occurs
@@ -168,6 +180,9 @@ server <- function(input, output) {
     # )
     
   })
+    output$contents3 <- renderPlot({
+
+    })
 }
 
 # Create Shiny app ----
