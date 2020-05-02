@@ -4,20 +4,12 @@ library(ggplot2)
 library(incidence)
 library(cluster.datasets)
 
-res_parametric_si <- estimate_R(Flu2009$incidence, 
-                                method="parametric_si",
-                                config = make_config(list(
-                                    mean_si = 2.6, 
-                                    std_si = 1.5))
-)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-
+    
     # Application title
-    titlePanel("MVP Interface"),
-
-    # Sidebar with a slider input for number of bins 
+    titlePanel("Preliminary Interface"),
     sidebarLayout(
         sidebarPanel(
             
@@ -59,18 +51,35 @@ ui <- fluidPage(
             
             
         ),
-
+        
         # Show a plot of the generated distribution
         mainPanel(
             tableOutput("contents"),
-           
-            plotOutput("distPlot")
+            plotOutput("plot1")
         )
     )
+    
 )
 
-# Define server logic required to draw a histogram
+# Define server logic required to read data and produce plot
 server <- function(input, output) {
+    
+    
+    csv <- reactive({
+        req(input$file1)
+        read.csv(input$file1$datapath,
+                 header = input$header,
+                 sep = input$sep,
+                 quote = input$quote)
+    })
+    
+    df <- reactive({
+        req(input$file1)
+        x = csv()
+        x[,1]<-as.Date(x[,1], "%d/%m/%Y")
+        dfR <- estimate_R(x, method = "parametric_si", config = make_config(list(mean_si = 4.8, std_si = 2.3)))
+        return(dfR)
+    })
     
     output$contents <- renderTable({
         
@@ -103,12 +112,17 @@ server <- function(input, output) {
         }
         
     })
-
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        plot(res_parametric_si, legend = FALSE)
-       
+    
+    
+    #plotting function using ggplot2
+    output$plot1 <- renderPlot({
+        
+        plot(df())
+        
+        
     })
+    
+    
 }
 
 # Run the application 
