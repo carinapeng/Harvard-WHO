@@ -3,7 +3,7 @@ library(shiny)
   ui <- fluidPage(
     
     # App title ----
-    titlePanel("Hello Shiny!"),
+    titlePanel("Hello Team!"),
     
     # Sidebar layout with input and output definitions ----
     sidebarLayout(
@@ -13,9 +13,9 @@ library(shiny)
         
         # Input: Slider for the number of bins ----
         sliderInput(inputId = "bins",
-                    label = "Number of bins:",
+                    label = "Number of bins (N is between 1 and 500):",
                     min = 1,
-                    max = 50,
+                    max = 500,
                     value = 30)
           
       ),
@@ -23,6 +23,7 @@ library(shiny)
       # Main panel for displaying outputs ----
       mainPanel(
         
+        h1('Results'),
         # Output: Histogram ----
         plotOutput(outputId = "distPlot")
         
