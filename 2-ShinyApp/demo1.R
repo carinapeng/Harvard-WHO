@@ -1,4 +1,5 @@
 library(shiny)
+setwd("../2-ShinyApp")
 # Define UI for app that draws a histogram ----
   ui <- fluidPage(
     
@@ -56,3 +57,4 @@ library(shiny)
   
 
   shinyApp(ui = ui, server = server)
+  

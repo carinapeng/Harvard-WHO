@@ -6,6 +6,8 @@ data("midwest", package = "ggplot2")  # load the data
 # midwest <- read.csv("http://goo.gl/G1K41K") # alt source 
 
 # 1. Init Ggplot
+names(midwest)
+head(midwest$area)
 g1 <- ggplot(midwest, aes(x=area, y=poptotal))  # area and poptotal are columns in 'midwest'
 plot(g1)
 

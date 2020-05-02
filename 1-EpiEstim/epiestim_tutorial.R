@@ -5,10 +5,17 @@ library(cluster.datasets)
 # load data
 data(Flu2009)
 
+# This is a list
+class(Flu2009)
+
+# This is a data.frame, which can be saved as a csv
+class(Flu2009$incidence)
+
 # explore data and write to file
 head(Flu2009$incidence)
 head(Flu2009$si_data)
-write.csv(Flu2009, "Flu2009.csv")
+setwd("/Users/runlinwang/Documents/Harvard-WHO/1-EpiEstim")
+write.csv(Flu2009$incidence, "Flu2009.csv")
 
 ## 1. serial interval (SI) distribution:
 ## interval-ceonsored serial interval data:
@@ -19,14 +26,15 @@ write.csv(Flu2009, "Flu2009.csv")
 ## (see Reich et al. Statist. Med. 2009).
 
 png("incidents.png")
+# Don't currently have as.incidence
 plot(as.incidence(Flu2009$incidence$I, dates = Flu2009$incidence$dates))
 dev.off()
 
 res_parametric_si <- estimate_R(Flu2009$incidence, 
                                 method="parametric_si",
                                 config = make_config(list(
-                                  mean_si = 2.6, 
-                                  std_si = 1.5))
+                                  mean_si = 4.8, 
+                                  std_si = 2.3))
 )
 
 # Explore model
