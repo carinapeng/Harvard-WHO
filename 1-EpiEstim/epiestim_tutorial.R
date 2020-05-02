@@ -42,7 +42,7 @@ mean(Flu2009$incidence$I)
 sd(Flu2009$incidence$I)
 
 # Plot
-png("res_parametric_si.png")
+png("res_parametric_si_r.png")
 plot(res_parametric_si, legend = FALSE)
 dev.off()
 
