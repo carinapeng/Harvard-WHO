@@ -9,12 +9,12 @@ library(cluster.datasets)
 ui <- fluidPage(
     
     # Application title
-    titlePanel("Preliminary Interface"),
+    titlePanel("WHO / PAHO"),
     sidebarLayout(
         sidebarPanel(
             
             # Input: Select a file ----
-            fileInput("file1", "Choose CSV File",
+            fileInput("file1", "Insert CSV File",
                       multiple = FALSE,
                       accept = c("text/csv",
                                  "text/comma-separated-values,text/plain",
@@ -55,7 +55,8 @@ ui <- fluidPage(
         # Show a plot of the generated distribution
         mainPanel(
             tableOutput("contents"),
-            plotOutput("plot1")
+            plotOutput("plot"),
+            plotOuput("ggplot")
         )
     )
     
@@ -63,7 +64,6 @@ ui <- fluidPage(
 
 # Define server logic required to read data and produce plot
 server <- function(input, output) {
-    
     
     csv <- reactive({
         req(input$file1)
@@ -114,10 +114,18 @@ server <- function(input, output) {
     })
     
     
-    #plotting function using ggplot2
-    output$plot1 <- renderPlot({
+    # Plotting function using ggplot2
+    output$plot <- renderPlot({
         
         plot(df())
+        
+       res_parametric_si <- estimate_R(x, 
+                   method = "parametric_si", 
+                   config = make_config(list(
+                       mean_si = 4.8, 
+                       std_si = 2.3)))
+       
+       plot_R_data <- data.frame(dates = res_parametric_si$dates)
         
         
     })
