@@ -9,7 +9,6 @@ This interface will help the World Health Organization and many countries succes
 https://harvardanalytics.shinyapps.io/covid19/
 
 # The Team
-Carina Peng: fpeng@college.harvard.edu
 
 Justin Zhu: justinzhu@college.harvard.edu
 
@@ -20,6 +19,8 @@ Sophie Khorasani: sbkhorasani@college.harvard.edu
 RunLin Wang: rwang3@college.harvard.edu
 
 Theresa Nguyen: nguyenn@college.harvard.edu
+
+Carina Peng: fpeng@college.harvard.edu
 
 
 # World Health Organization Collaborators
