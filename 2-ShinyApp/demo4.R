@@ -34,10 +34,10 @@ ui <- fluidPage(
       tags$hr(),
       
       # Input: Checkbox if file has header ----
-      checkboxInput("header", "Header", TRUE),
+      checkboxInput(inputID = "header", label = "Header", value = TRUE),
       
       # Input: Select separator ----
-      radioButtons("sep", "Separator",
+      radioButtons(inputID = "sep", label = "Separator",
                    choices = c(Comma = ",",
                                Semicolon = ";",
                                Tab = "\t"),
