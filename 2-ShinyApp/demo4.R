@@ -1,6 +1,15 @@
-
-
 library(shiny)
+library(EpiEstim)
+library(ggplot2)
+library(incidence)
+library(cluster.datasets)
+
+res_parametric_si <- estimate_R(Flu2009$incidence, 
+                                method="parametric_si",
+                                config = make_config(list(
+                                  mean_si = 2.6, 
+                                  std_si = 1.5))
+)
 
 # Define UI for data upload app ----
 ui <- fluidPage(
@@ -25,10 +34,10 @@ ui <- fluidPage(
       tags$hr(),
       
       # Input: Checkbox if file has header ----
-      checkboxInput("header", "Header", TRUE),
+      checkboxInput(inputID = "header", label = "Header", value = TRUE),
       
       # Input: Select separator ----
-      radioButtons("sep", "Separator",
+      radioButtons(inputID = "sep", label = "Separator",
                    choices = c(Comma = ",",
                                Semicolon = ";",
                                Tab = "\t"),
@@ -95,6 +104,12 @@ server <- function(input, output) {
     else {
       return(df)
     }
+    
+  })
+  
+  output$distPlot <- renderPlot({
+    # generate bins based on input$bins from ui.R
+    plot(res_parametric_si, legend = FALSE)
     
   })
   
