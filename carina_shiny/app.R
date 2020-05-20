@@ -1,3 +1,4 @@
+# Load libraries
 library(shiny)
 library(EpiEstim)
 library(ggplot2)
@@ -5,7 +6,7 @@ library(incidence)
 library(cluster.datasets)
 
 
-# Define UI for application that draws a histogram
+# Define UI for application
 ui <- fluidPage(
     
     # Application title
@@ -24,17 +25,19 @@ ui <- fluidPage(
             tags$hr(),
             
             # Input: Checkbox if file has header ----
-            checkboxInput("header", "Header", TRUE),
+            checkboxInput(inputId = "header", label = "Header", value = TRUE),
             
             # Input: Select separator ----
-            radioButtons("sep", "Separator",
+            radioButtons(inputId = "sep", 
+                         label = "Separator",
                          choices = c(Comma = ",",
                                      Semicolon = ";",
                                      Tab = "\t"),
                          selected = ","),
             
             # Input: Select quotes ----
-            radioButtons("quote", "Quote",
+            radioButtons(inputId = "quote", 
+                         label = "Quote",
                          choices = c(None = "",
                                      "Double Quote" = '"',
                                      "Single Quote" = "'"),
@@ -44,15 +47,14 @@ ui <- fluidPage(
             tags$hr(),
             
             # Input: Select number of rows to display ----
-            radioButtons("disp", "Display",
+            radioButtons(inputId = "disp", 
+                         label = "Display",
                          choices = c(Head = "head",
                                      All = "all"),
                          selected = "head")
             
-            
         ),
         
-        # Show a plot of the generated distribution
         mainPanel(
             tableOutput("contents"),
             plotOutput("plot"),
@@ -73,11 +75,16 @@ server <- function(input, output) {
                  quote = input$quote)
     })
     
+    # Apply parametric_si to the uploaded CSV input
     df <- reactive({
         req(input$file1)
         x = csv()
         x[,1]<-as.Date(x[,1], "%d/%m/%Y")
-        dfR <- estimate_R(x, method = "parametric_si", config = make_config(list(mean_si = 4.8, std_si = 2.3)))
+        dfR <- estimate_R(x, 
+                          method = "parametric_si", 
+                          config = make_config(list(
+                              mean_si = 4.8, 
+                              std_si = 2.3)))
         return(dfR)
     })
     
@@ -114,21 +121,29 @@ server <- function(input, output) {
     })
     
     
-    # Plotting function using ggplot2
+    # Plotting with original EpiEstim plots
     output$plot <- renderPlot({
         
         plot(df())
         
-       res_parametric_si <- estimate_R(x, 
-                   method = "parametric_si", 
-                   config = make_config(list(
-                       mean_si = 4.8, 
-                       std_si = 2.3)))
-       
-       plot_R_data <- data.frame(dates = res_parametric_si$dates)
+    })
+    
+    # Plotting using ggplot2
+    
+    output$ggplot <- renderPlot({
+        
+        res_parametric_si <- estimate_R(x, 
+                                        method = "parametric_si", 
+                                        config = make_config(list(
+                                            mean_si = 4.8, 
+                                            std_si = 2.3)))
+        
+        plot_R_data <- data.frame(dates = res_parametric_si$dates)
         
         
     })
+        
+
     
     
 }
